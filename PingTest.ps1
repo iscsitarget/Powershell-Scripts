@@ -1,32 +1,25 @@
-$hosts = "host1", "host2", "host3" # replace with your list of hosts
-$pingIntervalSeconds = 5 # time between each ping
-$pingDurationSeconds = 60 # total time to ping
+$ipList = "1.1.1.1", "8.8.8.8" # replace with your list of hosts
+$pingCount = 200 # how many times to ping each host
 
-$results = @()
-$endTime = (Get-Date).AddSeconds($pingDurationSeconds)
+$pingResults = @()
 
-while ((Get-Date) -lt $endTime) {
-  foreach ($host in $hosts) {
-    $ping = Test-Connection -ComputerName $host -Count 1 -ErrorAction SilentlyContinue
-    if ($ping) {
-      $result = [PSCustomObject]@{
-        Hostname = $host
-        PingStatus = "Success"
-        ResponseTimeMs = $ping.ResponseTime
-        Timestamp = Get-Date
-      }
+# Loop for every ping count
+for ($i = 0; $i -lt $pingCount; $i++) {
+    # Loop for every IP address
+    foreach ($ip in $ipList) {
+        # Ping the host
+        $ping = Test-Connection -Count 1 -ComputerName $ip
+        # Add detailed results to the ping results array
+        $pingResults += [PSCustomObject]@{
+            "IP" = $ping.Address
+            "Source" = $ping.Source
+            "Time" = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            "Latency (ms)" = $ping.Latency
+        }
     }
-    else {
-      $result = [PSCustomObject]@{
-        Hostname = $host
-        PingStatus = "Failed"
-        ResponseTimeMs = 0
-        Timestamp = Get-Date
-      }
-    }
-    $results += $result
-  }
-  Start-Sleep -Seconds $pingIntervalSeconds
+    # Wait 1 second before the next ping
+    Start-Sleep -Seconds 1
 }
 
-$results | Export-Csv -Path "ping_results.csv" -NoTypeInformation
+# Export the ping results to a CSV file
+$pingResults | Export-Csv -Path "ping_results.csv" -NoTypeInformation
