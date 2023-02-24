@@ -12,7 +12,7 @@
     Optionally provide a WDSServer IP
 
 .PARAMETER WDSBootProgram
-    Optionally provide a csv path, default using "Boot\x64\wdsnbp.com"
+    Optionally provide a boot image path, default using "Boot\x64\wdsnbp.com"
 
 
 .EXAMPLE
