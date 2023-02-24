@@ -6,20 +6,8 @@
     Install DHCP Failover for 2 Windows Servers. DHCP Role needs to be installed on both
     and scopes must be configured on the primary DC
 
-.PARAMETER csvPath
-    Optionally provide a csv path, default using DHCP.csv inside this folder.
-
-.PARAMETER WDSServer
-    Optionally provide a WDSServer IP
-
-.PARAMETER WDSBootProgram
-    Optionally provide a boot path, default using "Boot\x64\wdsnbp.com"
-
-
 .EXAMPLE
-    PS C:\> .\CreateDHCPSubnets.ps1 -csvPath "C:\dhcp.csv" -WDSServer 1.2.3.4
-    Scope <1> created.
-    Scope <2> created.
+    PS C:\> .\CreateDHCPFailover.ps1 -Source DC1 -Destination DC2 -Secret "MySecret"
     ...
 
 .NOTES
